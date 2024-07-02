@@ -1,27 +1,18 @@
 import { useState } from 'react';
-import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Species, Status, fetchCharacters } from './services';
 
 export const App = () => {
-  const [species, setSpecies] = useState<string[]>([]);
+  const [name, setName] = useState('');
+  const [status, setStatus] = useState<Status>('');
+  const [species, setSpecies] = useState<Species>('');
 
-  const fetchSpecies = async (url: string) => {
-    const response = await fetch(url);
-    const { info, results } = await response.json();
+  const query = useQuery({
+    queryKey: ['characters', species, name, status],
+    queryFn: () => fetchCharacters({ species, name, status }),
+  });
 
-    if (info.next === null) {
-      return;
-    }
-
-    const optionSpecies = results.map(
-      ({ species }: { species: string }) => species,
-    );
-    setSpecies((prev) => [...new Set<string>([...prev, ...optionSpecies])]);
-    fetchSpecies(info.next);
-  };
-
-  useEffect(() => {
-    fetchSpecies('https://rickandmortyapi.com/api/character');
-  }, []);
+  console.log(query);
 
   return (
     <>
@@ -32,10 +23,21 @@ export const App = () => {
       <main>
         <form>
           <label htmlFor='charName'>Имя персонажа</label>
-          <input id='charName' type='text' name='charName' />
+          <input
+            id='charName'
+            type='text'
+            name='charName'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
           <label htmlFor='isAlive'>Жив?</label>
-          <select name='isAlive' id='isAlive'>
+          <select
+            name='isAlive'
+            id='isAlive'
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
             <option value=''>Выберите вариант</option>
             <option value='alive'>Да</option>
             <option value='dead'>Нет</option>
@@ -43,19 +45,23 @@ export const App = () => {
           </select>
 
           <label htmlFor='species'>Раса</label>
-          <select name='species' id='species'>
+          <select
+            name='species'
+            id='species'
+            value={species}
+            onChange={(e) => setSpecies(e.target.value)}
+          >
             <option value=''>Выберите вариант</option>
-            {species.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-            {/* <option value='Human'>Человек</option>
+            <option value='Human'>Человек</option>
             <option value='Alien'>Пришелец</option>
+            <option value='Animal'>Animal</option>
+            <option value='Cronenberg'>Cronenberg</option>
+            <option value='Disease'>Disease</option>
+            <option value='Humanoid'>Humanoid</option>
+            <option value='Mythological Creature'>Mythological Creature</option>
+            <option value='Poopybutthole'>Poopybutthole</option>
+            <option value='Robot'>Робот</option>
             <option value='unknown'>Неизвестно</option>
-            <option value='Poopybutthole'>??</option>
-            <option value='Mythological Creature'>?</option>
-            <option value='Animal'>Animal</option> */}
           </select>
 
           <label htmlFor='episode'>Эпизод</label>
