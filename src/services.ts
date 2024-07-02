@@ -59,10 +59,14 @@ type EpisodeFilterParameters = {
 const basePath = 'https://rickandmortyapi.com/api';
 
 export const fetchCharacters = async (params?: FilterParameters) => {
- 
   const { data } = await axios.get<CharacterResponse>(`${basePath}/character`, {
     params,
   });
+  return data;
+};
+
+export const fetchSingleCharacter = async (id?: string) => {
+  const { data } = await axios.get<Character>(`${basePath}/character/${id}`);
   return data;
 };
 

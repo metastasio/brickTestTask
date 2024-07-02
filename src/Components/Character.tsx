@@ -1,30 +1,36 @@
-import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { Link, useParams } from 'react-router-dom';
+import { fetchSingleCharacter } from '../services';
 
 export const Character = () => {
+  const { id } = useParams();
+  const { data: character } = useQuery({
+    queryKey: ['character', id],
+    queryFn: () => fetchSingleCharacter(id),
+  });
+  console.log(character, 'character');
+
   return (
     <>
       <nav>
         <Link to={'/'}>Назад</Link>
       </nav>
 
-      {/* <section className={styles.user_profile}>
-        <div className={styles.user_main_info}>
-          <div className={styles.user_main_info_name}>
-            <h2 className={styles.user_name}>
-              {first_name} {last_name}
-            </h2>
-            <h3 className={styles.user_status}>Партнер</h3>
-          </div>
+      <section>
+        <h2>{character?.name}</h2>
+        <img
+          src={character?.image}
+          alt={`Фото пользователя ${character?.name}`}
+          width='187'
+          height='187'
+        />
 
-          <img
-            className={styles.user_pfp}
-            src={avatar}
-            alt={`Фото пользователя ${first_name} ${last_name}`}
-            width='187'
-            height='187'
-          />
-        </div>
-      </section> */}
+        <p>Статус: {character?.status}</p>
+        <p>Вид: {character?.species}</p>
+        <p>Пол: {character?.gender}</p>
+        <p>Происхождение: {character?.origin.name}</p>
+        <p>Местонахождение: {character?.location.name}</p>
+      </section>
     </>
   );
 };
