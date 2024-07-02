@@ -2,25 +2,26 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 export const App = () => {
-  const [species, setSpecies] = useState<string[] | []>([]);
+  const [species, setSpecies] = useState<string[]>([]);
 
-  const fetchSpecies = async () => {
-    const data = await fetch('https://rickandmortyapi.com/api/character');
-    const { results: characters } = await data.json();
+  const fetchSpecies = async (url: string) => {
+    const response = await fetch(url);
+    const { info, results } = await response.json();
 
-    const optionSpecies = characters.map(
-      (character: { species: string }) => character.species,
+    if (info.next === null) {
+      return;
+    }
+
+    const optionSpecies = results.map(
+      ({ species }: { species: string }) => species,
     );
-    setSpecies([...new Set<string>(optionSpecies)]);
-
-    console.log(characters, 'AAA');
+    setSpecies((prev) => [...new Set<string>([...prev, ...optionSpecies])]);
+    fetchSpecies(info.next);
   };
 
   useEffect(() => {
-    fetchSpecies();
+    fetchSpecies('https://rickandmortyapi.com/api/character');
   }, []);
-
-  console.log(species, 'SPECIES');
 
   return (
     <>
@@ -45,7 +46,9 @@ export const App = () => {
           <select name='species' id='species'>
             <option value=''>Выберите вариант</option>
             {species.map((item) => (
-              <option value={item}>{item}</option>
+              <option key={item} value={item}>
+                {item}
+              </option>
             ))}
             {/* <option value='Human'>Человек</option>
             <option value='Alien'>Пришелец</option>
