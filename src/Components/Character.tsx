@@ -8,7 +8,6 @@ export const Character = () => {
     queryKey: ['character', id],
     queryFn: () => fetchSingleCharacter(id),
   });
-  console.log(character, 'character');
 
   return (
     <>

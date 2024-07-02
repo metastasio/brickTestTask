@@ -1,25 +1,35 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Species, Status, fetchCharacters, fetchEpisodes } from '../services';
 import { CharacterCard } from './CharacterCard';
 
 export const MainPage = () => {
-  const [name, setName] = useState('');
+  const [characterName, setCharacterName] = useSearchParams('');
   const [status, setStatus] = useState<Status>('');
   const [species, setSpecies] = useState<Species>('');
   const [episodeName, setEpisodeName] = useState('');
-
-  const { data: characters } = useQuery({
+  const name = characterName.get('characterName') ?? '';
+  
+  const {
+    isLoading,
+    isError,
+    data: characters,
+    error,
+    isFetching,
+  } = useQuery({
     queryKey: ['characters', species, name, status],
     queryFn: () => fetchCharacters({ species, name, status }),
+    enabled: !!characterName || !!status || !!species,
   });
+    
+    const { data: episodes } = useQuery({
+        queryKey: ['episodes', episodeName],
+        queryFn: () => fetchEpisodes({ name: episodeName }),
+        enabled: !!episodeName,
+    });
 
-  const { data: episodes } = useQuery({
-    queryKey: ['episodes', episodeName],
-    queryFn: () => fetchEpisodes({ name: episodeName }),
-  });
-
-  console.log(characters);
+//   console.log(characters);
   console.log(episodes);
 
   return (
@@ -37,7 +47,7 @@ export const MainPage = () => {
             name='name'
             placeholder='Имя персонажа'
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setCharacterName({ characterName: e.target.value })}
           />
 
           <label htmlFor='status'>Жив?</label>
@@ -86,15 +96,21 @@ export const MainPage = () => {
           />
         </form>
 
-        {characters && characters.results.length !== 0 ? (
+        {characters ? (
           <ul>
             {characters.results.map((character) => (
               <CharacterCard key={character.id} {...character} />
             ))}
           </ul>
+        ) : isError ? (
+          <span>Error: {error.message}</span>
+        ) : isLoading ? (
+          <span>Ищем...</span>
         ) : (
-          <p>Здесь пока ничего нет</p>
+          <span>Здесь пока ничего нет..</span>
         )}
+
+        <p>{isFetching ? 'Ищем...' : null}</p>
       </main>
     </>
   );

@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import { Character } from '../services';
 
 export const CharacterCard = (props: Character) => {
-  const { id, name, location, image } = props;
-  console.log(location);
+  const { id, name, image } = props;
+
   return (
     <li>
       <Link to={`character/${id}`}>
