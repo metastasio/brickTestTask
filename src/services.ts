@@ -1,5 +1,36 @@
 import axios from 'axios';
 
+export type Character = {
+  id: number;
+  name: string;
+  status: string;
+  species: string;
+  type: string;
+  gender: string;
+  origin: {
+    name: string;
+    url: string;
+  };
+  location: {
+    name: string;
+    url: string;
+  };
+  image: string;
+  episode: string[];
+  url: string;
+  created: string;
+};
+
+export type CharacterResponse = {
+  info: {
+    count: number;
+    pages: number;
+    next: string;
+    prev: null;
+  };
+  results: Character[];
+};
+
 export type Species =
   | 'Human'
   | 'Alien'
@@ -28,7 +59,10 @@ type EpisodeFilterParameters = {
 const basePath = 'https://rickandmortyapi.com/api';
 
 export const fetchCharacters = async (params?: FilterParameters) => {
-  const { data } = await axios.get(`${basePath}/character`, { params });
+ 
+  const { data } = await axios.get<CharacterResponse>(`${basePath}/character`, {
+    params,
+  });
   return data;
 };
 

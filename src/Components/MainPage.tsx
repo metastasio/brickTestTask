@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { Species, Status, fetchCharacters } from "../services";
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Species, Status, fetchCharacters, fetchEpisodes } from '../services';
+import { CharacterCard } from './CharacterCard';
 
 export const MainPage = () => {
   const [name, setName] = useState('');
@@ -13,13 +14,13 @@ export const MainPage = () => {
     queryFn: () => fetchCharacters({ species, name, status }),
   });
 
-  // const { data: episodes } = useQuery({
-  //   queryKey: ['episodes', episodeName],
-  //   queryFn: () => fetchEpisodes({ name: episodeName }),
-  // });
+  const { data: episodes } = useQuery({
+    queryKey: ['episodes', episodeName],
+    queryFn: () => fetchEpisodes({ name: episodeName }),
+  });
 
   console.log(characters);
-  // console.log(episodes);
+  console.log(episodes);
 
   return (
     <>
@@ -34,6 +35,7 @@ export const MainPage = () => {
             id='name'
             type='text'
             name='name'
+            placeholder='Имя персонажа'
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -59,16 +61,18 @@ export const MainPage = () => {
             onChange={(e) => setSpecies(e.target.value)}
           >
             <option value=''>Выберите вариант</option>
-            <option value='Human'>Человек</option>
-            <option value='Alien'>Пришелец</option>
-            <option value='Animal'>Animal</option>
-            <option value='Cronenberg'>Cronenberg</option>
-            <option value='Disease'>Disease</option>
-            <option value='Humanoid'>Humanoid</option>
-            <option value='Mythological Creature'>Mythological Creature</option>
-            <option value='Poopybutthole'>Poopybutthole</option>
-            <option value='Robot'>Робот</option>
+            <option value='Humanoid'>Гуманоид</option>
+            <option value='Animal'>Животное</option>
+            <option value='Disease'>Заболевания</option>
+            <option value='Cronenberg'>Кроненберг</option>
+            <option value='Mythological Creature'>
+              Мифологические существа
+            </option>
             <option value='unknown'>Неизвестно</option>
+            <option value='Alien'>Пришелец</option>
+            <option value='Robot'>Робот</option>
+            <option value='Human'>Человек</option>
+            <option value='Poopybutthole'>Poopybutthole</option>
           </select>
 
           <label htmlFor='episode'>Эпизод</label>
@@ -76,10 +80,21 @@ export const MainPage = () => {
             id='episode'
             type='text'
             name='episode'
+            placeholder='Название эпизода'
             value={episodeName}
             onChange={(e) => setEpisodeName(e.target.value)}
           />
         </form>
+
+        {characters && characters.results.length !== 0 ? (
+          <ul>
+            {characters.results.map((character) => (
+              <CharacterCard key={character.id} {...character} />
+            ))}
+          </ul>
+        ) : (
+          <p>Здесь пока ничего нет</p>
+        )}
       </main>
     </>
   );
