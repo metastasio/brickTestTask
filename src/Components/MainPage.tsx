@@ -1,16 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { ChangeEventHandler, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Species, Status, fetchCharacters, fetchEpisodes } from '../services';
+import { fetchCharacters, fetchEpisodes } from '../services';
 import { CharacterCard } from './CharacterCard';
 
 export const MainPage = () => {
-  const [characterName, setCharacterName] = useSearchParams('');
-  const [status, setStatus] = useState<Status>('');
-  const [species, setSpecies] = useState<Species>('');
+  const [searchParams, setSearchParams] = useSearchParams();
   const [episodeName, setEpisodeName] = useState('');
-  const name = characterName.get('characterName') ?? '';
-  
+  const name = searchParams.get('name') ?? '';
+  const status = searchParams.get('status') ?? '';
+  const species = searchParams.get('species') ?? '';
+
   const {
     isLoading,
     isError,
@@ -20,17 +20,26 @@ export const MainPage = () => {
   } = useQuery({
     queryKey: ['characters', species, name, status],
     queryFn: () => fetchCharacters({ species, name, status }),
-    enabled: !!characterName || !!status || !!species,
+    enabled: !!name || !!status || !!species,
   });
-    
-    const { data: episodes } = useQuery({
-        queryKey: ['episodes', episodeName],
-        queryFn: () => fetchEpisodes({ name: episodeName }),
-        enabled: !!episodeName,
-    });
 
-//   console.log(characters);
+  const { data: episodes } = useQuery({
+    queryKey: ['episodes', episodeName],
+    queryFn: () => fetchEpisodes({ name: episodeName }),
+    enabled: !!episodeName,
+  });
+
+  //   console.log(characters);
   console.log(episodes);
+
+  const handleChange: ChangeEventHandler<
+    HTMLInputElement | HTMLSelectElement
+  > = (e) => {
+    setSearchParams((prev) => ({
+      ...Object.fromEntries(new URLSearchParams(prev)),
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   return (
     <>
@@ -47,7 +56,7 @@ export const MainPage = () => {
             name='name'
             placeholder='Имя персонажа'
             value={name}
-            onChange={(e) => setCharacterName({ characterName: e.target.value })}
+            onChange={handleChange}
           />
 
           <label htmlFor='status'>Жив?</label>
@@ -55,7 +64,7 @@ export const MainPage = () => {
             name='status'
             id='status'
             value={status}
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={handleChange}
           >
             <option value=''>Выберите вариант</option>
             <option value='alive'>Да</option>
@@ -68,7 +77,7 @@ export const MainPage = () => {
             name='species'
             id='species'
             value={species}
-            onChange={(e) => setSpecies(e.target.value)}
+            onChange={handleChange}
           >
             <option value=''>Выберите вариант</option>
             <option value='Humanoid'>Гуманоид</option>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export type Character = {
+type Character = {
   id: number;
   name: string;
   status: string;
@@ -21,7 +21,7 @@ export type Character = {
   created: string;
 };
 
-export type CharacterResponse = {
+type CharacterResponse = {
   info: {
     count: number;
     pages: number;
@@ -31,7 +31,7 @@ export type CharacterResponse = {
   results: Character[];
 };
 
-export type Species =
+type Species =
   | 'Human'
   | 'Alien'
   | 'Humanoid'
@@ -44,7 +44,7 @@ export type Species =
   | 'Disease'
   | string;
 
-export type Status = 'alive' | 'dead' | 'unknown' | string;
+type Status = 'alive' | 'dead' | 'unknown' | string;
 
 type FilterParameters = {
   name?: string;
