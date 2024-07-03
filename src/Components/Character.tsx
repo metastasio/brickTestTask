@@ -22,7 +22,7 @@ export const Character = () => {
     <section className='w-8/12 mt-10 mx-auto'>
 
       <button
-        className='block rounded-md bg-transparent px-3 py-2 text-sm border border-teal-400 hover:bg-teal-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500'
+        className='block rounded-md bg-transparent px-3 py-2 text-sm border border-teal-400 hover:bg-teal-200 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-lime-500'
         onClick={() => navigate(-1)}
       >
         Назад
@@ -38,7 +38,7 @@ export const Character = () => {
             <img
               className='max-w-80 rounded-full block'
               src={character?.image}
-              alt={`Фото пользователя ${character?.name}`}
+              alt={`Изображение персонажа ${character?.name}`}
               width='187'
               height='187'
             />

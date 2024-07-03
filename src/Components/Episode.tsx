@@ -7,7 +7,6 @@ export const Episode = () => {
   const { id } = useParams();
   const {
     isFetching,
-    isError,
     error,
     data: episode,
   } = useQuery({
@@ -24,15 +23,24 @@ export const Episode = () => {
   }
 
   return (
-    <>
-      <button onClick={() => navigate(-1)}>Назад</button>
+    <article className='w-8/12 mt-10 mx-auto'>
+      <button
+        className='block rounded-md bg-transparent px-3 py-2 text-sm border border-teal-400 hover:bg-teal-200 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-lime-500'
+        onClick={() => navigate(-1)}
+      >
+        Назад
+      </button>
 
       <div>
-        <h2>{episode?.name}</h2>
-        <p>{episode?.air_date}</p>
+        <h2 className='text-4xl text-center font-mono font-bold'>
+          {episode?.name}
+        </h2>
+        <p className='text-lg text-center mb-6'>{episode?.air_date}</p>
 
-        <h4>Characters</h4>
-        <ul>
+        <h4 className='mb-4 text-xl text-center font-semibold'>
+          Список персонажей:
+        </h4>
+        <ul className='mb-16 text-center'>
           {episode?.characters.map((character) => {
             const characterUrlParts = character.split('/');
             const characterId = characterUrlParts[characterUrlParts.length - 1];
@@ -41,24 +49,28 @@ export const Episode = () => {
           })}
         </ul>
       </div>
-    </>
+    </article>
   );
 };
 
-function CharacterItem({ id }) {
+function CharacterItem({ id }: { id: string }) {
   const { status, data: character } = useQuery({
     queryKey: ['character', id],
     queryFn: () => fetchSingleCharacter(id),
   });
 
   if (status === 'pending') return <p>Loading...</p>;
-  if (status === 'error') return <p>Error :(</p>;
+  if (status === 'error') return <p>Error :c</p>;
 
   return (
-    <article key={id}>
-      <Link to={`/characters/${id}`}>
-        <p>{character?.name}</p>
+    <li>
+      <Link
+        key={id}
+        className='text-center text-lg text-cyan-700 hover:text-cyan-500 underline visited:text-cyan-500 visited:no-underline'
+        to={`/character/${id}`}
+      >
+        {character?.name}
       </Link>
-    </article>
+    </li>
   );
 }

@@ -58,7 +58,7 @@ export const MainPage = () => {
             <div className='col-span-full'>
               <label
                 htmlFor='name'
-                className='block text-lg font-medium leading-6 text-cyan-950'
+                className='block text-lg font-medium leading-6'
               >
                 Имя персонажа
               </label>
@@ -70,7 +70,7 @@ export const MainPage = () => {
                   placeholder='Имя персонажа'
                   value={name}
                   onChange={handleChange}
-                  className='block w-full bg-teal-50 rounded-md border-0 px-2 py-1.5 text-cyan-950 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6'
+                  className='block w-full bg-teal-50 rounded-md border-0 px-2 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6'
                 />
               </div>
             </div>
@@ -78,7 +78,7 @@ export const MainPage = () => {
             <div className='sm:col-span-3'>
               <label
                 htmlFor='status'
-                className='block text-lg font-medium leading-6 text-cyan-950'
+                className='block text-lg font-medium leading-6'
               >
                 Жив?
               </label>
@@ -88,7 +88,7 @@ export const MainPage = () => {
                   id='status'
                   value={status}
                   onChange={handleChange}
-                  className='block w-full bg-teal-50 rounded-md border-0 px-1 py-1.5 text-cyan-950 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600  sm:text-sm sm:leading-6'
+                  className='block w-full bg-teal-50 rounded-md border-0 px-1 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600  sm:text-sm sm:leading-6'
                 >
                   <option value=''>Выберите вариант</option>
                   <option value='alive'>Да</option>
@@ -101,7 +101,7 @@ export const MainPage = () => {
             <div className='sm:col-span-3'>
               <label
                 htmlFor='species'
-                className='block text-lg font-medium leading-6 text-cyan-950'
+                className='block text-lg font-medium leading-6'
               >
                 Раса
               </label>
@@ -111,7 +111,7 @@ export const MainPage = () => {
                   id='species'
                   value={species}
                   onChange={handleChange}
-                  className='block w-full bg-teal-50 rounded-md border-0 px-1 py-1.5 text-cyan-950 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600  sm:text-sm sm:leading-6'
+                  className='block w-full bg-teal-50 rounded-md border-0 px-1 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600  sm:text-sm sm:leading-6'
                 >
                   <option value=''>Выберите вариант</option>
                   <option value='Humanoid'>Гуманоид</option>
@@ -133,7 +133,7 @@ export const MainPage = () => {
             <div className='col-span-full'>
               <label
                 htmlFor='episode'
-                className='block text-lg font-medium leading-6 text-cyan-950'
+                className='block text-lg font-medium leading-6'
               >
                 Эпизод
               </label>
@@ -145,7 +145,7 @@ export const MainPage = () => {
                   placeholder='Название эпизода'
                   value={episodeName}
                   onChange={(e) => setEpisodeName(e.target.value)}
-                  className='block w-full bg-teal-50 rounded-md border-0 px-2 py-1.5 text-cyan-950 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6'
+                  className='block w-full bg-teal-50 rounded-md border-0 px-2 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6'
                 />
               </div>
             </div>
@@ -153,13 +153,21 @@ export const MainPage = () => {
         </form>
 
         {episodes ? (
-          <ul>
-            {episodes.results.map((episode) => (
-              <li key={episode.id}>
-                <Link to={`/episode/${episode.id}`}>{episode.name}</Link>
-              </li>
-            ))}
-          </ul>
+          <section className='ml-2'>
+            <h2 className='mb-2 text-2xl font-semibold'>Эпизоды:</h2>
+            <ul className='mb-16'>
+              {episodes.results.map((episode) => (
+                <li className='mb-1' key={episode.id}>
+                  <Link
+                    className='text-lg text-cyan-700 hover:text-cyan-500 underline visited:text-cyan-500 visited:no-underline'
+                    to={`/episode/${episode.id}`}
+                  >
+                    {episode.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
         ) : null}
 
         <CharactersList

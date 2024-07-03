@@ -11,15 +11,27 @@ type CharactersListProps = {
 export const CharactersList = (props: CharactersListProps) => {
   const { error, isLoading, characters } = props;
   if (isLoading) {
-    return <span>Ищем...</span>;
+    return (
+      <img
+        className='block mx-auto animate-spin'
+        width='150'
+        height='150'
+        src='/logo.png'
+        alt='Рик и Морти выходят из портала'
+      />
+    );
   }
 
-  if (error && isAxiosError(error) && error.response?.status !== 404) {
-    return <span>Произошла ошибка</span>;
+  if (error && isAxiosError(error) && error.response?.status === 404) {
+    return <span>Такого персонажа нет :c</span>;
+  }
+
+  if (error) {
+    return <p>Произошла ошибка</p>;
   }
 
   if (!characters?.length) {
-    return <p>Такого персонажа нет :c</p>;
+    return <p>Начните искать</p>;
   }
 
   return (

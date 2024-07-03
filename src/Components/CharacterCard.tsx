@@ -10,7 +10,7 @@ export const CharacterCard = (props: Character) => {
         <img
           className='h-20 w-20 rounded-full block m-auto'
           src={image}
-          alt={`Фото пользователя ${name}}`}
+          alt={`Изображение персонажа ${name}}`}
           width='100'
           height='100'
         />
