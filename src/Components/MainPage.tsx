@@ -2,7 +2,8 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { ChangeEventHandler, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { fetchCharacters, fetchEpisodes } from '../services';
-import { CharacterCard } from './CharacterCard';
+// import { CharacterCard } from './CharacterCard';
+import { MainList } from './MainList';
 
 export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,6 +17,7 @@ export const MainPage = () => {
     data: characters,
     isFetching,
     fetchNextPage,
+    hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['characters', species, name, status],
     queryFn: ({ pageParam: page = 0 }) =>
@@ -48,27 +50,11 @@ export const MainPage = () => {
       [e.target.name]: e.target.value,
     }));
   };
-
+  console.log(isError, 'ERROR');
   return (
     <>
-      <header className=' pt-6 pb-8 bg-cyan-950'>
-        <div className='header-wrapper flex items-center justify-center flex-wrap gap-x-4'>
-          <img
-            className='w-16 h-16'
-            src='/logo.png'
-            alt='Логотип Рик и Морти'
-          />
-          <h1 className='text-4xl font-bold sm:text-6xl font-mono text-teal-200'>
-            Вселенная Рик и Морти
-          </h1>
-        </div>
-        <p className='mt-4 text-xl text-center text-teal-400'>
-          Ищите персонажей здесь. Это просто. Это легко.
-        </p>
-      </header>
-
       <main className='w-10/12 mt-12 mb-6 mx-auto'>
-        <form className='w-8/12 mx-auto'>
+        <form className='w-8/12 mx-auto mb-10'>
           <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
             <div className='col-span-full'>
               <label
@@ -178,25 +164,21 @@ export const MainPage = () => {
         ) : null}
 
         {characters ? (
-          <ul>
-            {characters.map((character) => (
-              <CharacterCard key={character.id} {...character} />
-            ))}
-          </ul>
-        ) : isError ? (
-          <span>Ничего не найдено</span>
-        ) : isFetching ? (
-          <span>Ищем...</span>
-        ) : (
-          <span>Здесь пока ничего нет..</span>
-        )}
+          <MainList
+            isError={isError}
+            isFetching={isFetching}
+            characters={characters}
+          />
+        ) : null}
 
-        <button
-          className='rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
-          onClick={() => fetchNextPage()}
-        >
-          Загрузить еще
-        </button>
+        {hasNextPage ? (
+          <button
+            className=' block mx-auto mt-10 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+            onClick={() => fetchNextPage()}
+          >
+            Загрузить еще
+          </button>
+        ) : null}
       </main>
     </>
   );

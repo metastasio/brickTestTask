@@ -4,10 +4,12 @@ import { MainPage } from './Components/MainPage';
 import { NotFound } from './Components/NotFound';
 import { CharacterNotFound } from './Components/CharacterNotFound';
 import { Episode } from './Components/Episode';
+import { Header } from './Components/Header';
 
 export const App = () => {
   return (
     <>
+      <Header />
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<MainPage />} />
