@@ -1,6 +1,7 @@
 import { AxiosError, isAxiosError } from 'axios';
 import { Character } from '../services';
 import { CharacterCard } from './CharacterCard';
+import { Spinner } from './Spinner';
 
 type CharactersListProps = {
   error?: Error | AxiosError | null;
@@ -11,23 +12,15 @@ type CharactersListProps = {
 export const CharactersList = (props: CharactersListProps) => {
   const { error, isLoading, characters } = props;
   if (isLoading) {
-    return (
-      <img
-        className='block mx-auto animate-spin'
-        width='150'
-        height='150'
-        src='/logo.png'
-        alt='Рик и Морти выходят из портала'
-      />
-    );
+    return <Spinner />;
   }
 
   if (error && isAxiosError(error) && error.response?.status === 404) {
-    return <span>Такого персонажа нет :c</span>;
+    return <p>Такого персонажа нет :c</p>;
   }
 
   if (error) {
-    return <p>Произошла ошибка</p>;
+    return <p className='text-red-900'>Произошла ошибка</p>;
   }
 
   if (!characters?.length) {
@@ -35,7 +28,7 @@ export const CharactersList = (props: CharactersListProps) => {
   }
 
   return (
-    <ul className='flex flex-wrap justify-evenly gap-10'>
+    <ul className='mt-10 flex flex-wrap justify-evenly gap-10'>
       {characters.map((character) => (
         <CharacterCard key={character.id} {...character} />
       ))}

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { fetchSingleCharacter } from '../services';
+import { Spinner } from './Spinner';
 
 export const Character = () => {
   const navigate = useNavigate();
@@ -20,15 +21,14 @@ export const Character = () => {
 
   return (
     <section className='w-8/12 mt-10 mx-auto'>
-
       <button
-        className='block rounded-md bg-transparent px-3 py-2 text-sm border border-teal-400 hover:bg-teal-200 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-lime-500'
+        className='block rounded-md bg-transparent px-3 py-2 text-teal-600 text-sm border border-teal-400 hover:bg-teal-200 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-lime-500'
         onClick={() => navigate(-1)}
       >
         Назад
       </button>
       {isLoading ? (
-        <p>Ищем...</p>
+        <Spinner />
       ) : (
         <section>
           <h2 className='text-4xl text-center font-mono font-bold'>
@@ -42,23 +42,27 @@ export const Character = () => {
               width='187'
               height='187'
             />
-            <section className='text-lg'>
+            <section className='text-lg font-mono'>
               <p className='pb-2'>
-                <span className='font-semibold'>Статус:</span>{' '}
+                <span className='font-semibold font-sans'>Статус:</span>{' '}
                 {character?.status}
               </p>
               <p className='pb-2'>
-                <span className='font-semibold'>Вид:</span> {character?.species}
+                <span className='font-semibold font-sans'>Вид:</span>{' '}
+                {character?.species}
               </p>
               <p className='pb-2'>
-                <span className='font-semibold'>Пол:</span> {character?.gender}
+                <span className='font-semibold font-sans'>Пол:</span>{' '}
+                {character?.gender}
               </p>
               <p className='pb-2'>
-                <span className='font-semibold'>Происхождение:</span>{' '}
+                <span className='font-semibold font-sans'>Происхождение:</span>{' '}
                 {character?.origin.name}
               </p>
-              <p>
-                <span className='font-semibold'>Местонахождение:</span>{' '}
+              <p className='font-mono'>
+                <span className='font-semibold font-sans'>
+                  Местонахождение:
+                </span>{' '}
                 {character?.location.name}
               </p>
             </section>

@@ -69,6 +69,7 @@ type FilterParameters = {
 
 type EpisodeFilterParameters = {
   name?: string;
+  page: number;
 };
 
 const basePath = 'https://rickandmortyapi.com/api';

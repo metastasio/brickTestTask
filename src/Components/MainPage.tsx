@@ -1,15 +1,15 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { ChangeEventHandler, useState } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { ChangeEventHandler } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { fetchCharacters, fetchEpisodes } from '../services';
 import { CharactersList } from './CharactersList';
 
 export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [episodeName, setEpisodeName] = useState('');
   const name = searchParams.get('name') ?? '';
   const status = searchParams.get('status') ?? '';
   const species = searchParams.get('species') ?? '';
+  const episode = searchParams.get('episode') ?? '';
 
   const {
     error,
@@ -34,10 +34,24 @@ export const MainPage = () => {
     retry: 0,
   });
 
-  const { data: episodes } = useQuery({
-    queryKey: ['episodes', episodeName],
-    queryFn: () => fetchEpisodes({ name: episodeName }),
-    enabled: !!episodeName,
+  const {
+    data: episodes,
+    fetchNextPage: fetchNextEpisodes,
+    hasNextPage: hasNextEpisodes,
+  } = useInfiniteQuery({
+    queryKey: ['episodes', episode],
+    queryFn: ({ pageParam: page = 0 }) =>
+      fetchEpisodes({ name: episode, page }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      const nextUrl = lastPage.info.next;
+      if (nextUrl) {
+        return Number(nextUrl.split('page=')[1][0]);
+      }
+      return null;
+    },
+    select: ({ pages }) => pages.map(({ results }) => results).flat(),
+    enabled: !!episode,
     retry: 0,
   });
 
@@ -53,7 +67,7 @@ export const MainPage = () => {
   return (
     <>
       <main className='w-8/12 mt-12 mb-6 mx-auto'>
-        <form className='mb-10'>
+        <form>
           <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
             <div className='col-span-full'>
               <label
@@ -143,8 +157,8 @@ export const MainPage = () => {
                   type='text'
                   name='episode'
                   placeholder='Название эпизода'
-                  value={episodeName}
-                  onChange={(e) => setEpisodeName(e.target.value)}
+                  value={episode}
+                  onChange={handleChange}
                   className='block w-full bg-teal-50 rounded-md border-0 px-2 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6'
                 />
               </div>
@@ -153,13 +167,13 @@ export const MainPage = () => {
         </form>
 
         {episodes ? (
-          <section className='ml-2'>
+          <section className='mt-10 ml-2'>
             <h2 className='mb-2 text-2xl font-semibold'>Эпизоды:</h2>
-            <ul className='mb-16'>
-              {episodes.results.map((episode) => (
+            <ul className='mb-10'>
+              {episodes.map((episode) => (
                 <li className='mb-1' key={episode.id}>
                   <Link
-                    className='text-lg text-cyan-700 hover:text-cyan-500 underline visited:text-cyan-500 visited:no-underline'
+                    className='text-lg text-cyan-700 hover:text-cyan-500 underline visited:text-cyan-500'
                     to={`/episode/${episode.id}`}
                   >
                     {episode.name}
@@ -168,6 +182,15 @@ export const MainPage = () => {
               ))}
             </ul>
           </section>
+        ) : null}
+
+        {hasNextEpisodes ? (
+          <button
+            className='block mt-4 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500'
+            onClick={() => fetchNextEpisodes()}
+          >
+            Загрузить еще
+          </button>
         ) : null}
 
         <CharactersList

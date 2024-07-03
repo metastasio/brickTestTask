@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchSingleCharacter, fetchSingleEpisode } from '../services';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Spinner } from './Spinner';
 
 export const Episode = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export const Episode = () => {
   });
 
   if (isFetching) {
-    return <p>Ищем</p>;
+    return <Spinner />;
   }
 
   if (error) {
