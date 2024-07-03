@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { ChangeEventHandler, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { fetchCharacters, fetchEpisodes } from '../services';
 import { CharacterCard } from './CharacterCard';
 
@@ -12,10 +12,8 @@ export const MainPage = () => {
   const species = searchParams.get('species') ?? '';
 
   const {
-    isLoading,
     isError,
     data: characters,
-    error,
     isFetching,
     fetchNextPage,
   } = useInfiniteQuery({
@@ -26,26 +24,21 @@ export const MainPage = () => {
     getNextPageParam: (lastPage) => {
       const nextUrl = lastPage.info.next;
       if (nextUrl) {
-        return nextUrl.split('page=')[1][0];
+        return Number(nextUrl.split('page=')[1][0]);
       }
-      return false;
+      return null;
     },
-    select: ({ pages }) => {
-      const test = pages.map(({ results }) => results).flat();
-
-      return test;
-    },
+    select: ({ pages }) => pages.map(({ results }) => results).flat(),
     enabled: !!name || !!status || !!species,
+    retry: 0,
   });
 
   const { data: episodes } = useQuery({
     queryKey: ['episodes', episodeName],
     queryFn: () => fetchEpisodes({ name: episodeName }),
     enabled: !!episodeName,
+    retry: 0,
   });
-
-  // console.log(characters, 'characters');
-  console.log(episodes);
 
   const handleChange: ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
@@ -70,116 +63,11 @@ export const MainPage = () => {
           </h1>
         </div>
         <p className='mt-4 text-xl text-center text-teal-400'>
-          {/* Искать персонажей стало еще проще */}
           Ищите персонажей здесь. Это просто. Это легко.
         </p>
       </header>
 
       <main className='w-10/12 mt-12 mb-6 mx-auto'>
-        {/* <form> */}
-        {/* <label
-            className='block text-lg font-medium leading-6 text-cyan-950'
-            htmlFor='name'
-          >
-            Имя персонажа
-          </label> */}
-        {/* <input
-            className='block  border-0 bg-teal-50 py-1.5 pl-1 text-cyan-950 placeholder:text-gray-600 focus:ring-0 sm:text-sm sm:leading-6'
-            id='name'
-            type='text'
-            name='name'
-            placeholder='Имя персонажа'
-            value={name}
-            onChange={handleChange}
-          /> */}
-
-        {/* <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
-            <div className='sm:col-span-4'>
-              <label
-                htmlFor='name'
-                className='block text-lg font-medium text-cyan-950'
-              >
-                Имя персонажа
-              </label>
-              <div className='mt-2'>
-                <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-600 sm:max-w-md'>
-                  <input
-                    id='name'
-                    type='text'
-                    name='name'
-                    placeholder='Имя персонажа'
-                    value={name}
-                    onChange={handleChange}
-                    className='block rounded-lg flex-1 border-0 bg-teal-50 py-1.5 pl-1 text-cyan-950 placeholder:text-gray-500 focus:ring-0 sm:text-sm sm:leading-6'
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <label htmlFor='status'>Жив?</label>
-          <select
-            name='status'
-            id='status'
-            value={status}
-            onChange={handleChange}
-          >
-            <option value=''>Выберите вариант</option>
-            <option value='alive'>Да</option>
-            <option value='dead'>Нет</option>
-            <option value='unknown'>Неизвестно</option>
-          </select>
-
-          <label htmlFor='species'>Раса</label>
-          <select
-            name='species'
-            id='species'
-            value={species}
-            onChange={handleChange}
-          >
-            <option value=''>Выберите вариант</option>
-            <option value='Humanoid'>Гуманоид</option>
-            <option value='Animal'>Животное</option>
-            <option value='Disease'>Заболевания</option>
-            <option value='Cronenberg'>Кроненберг</option>
-            <option value='Mythological Creature'>
-              Мифологические существа
-            </option>
-            <option value='unknown'>Неизвестно</option>
-            <option value='Alien'>Пришелец</option>
-            <option value='Robot'>Робот</option>
-            <option value='Human'>Человек</option>
-            <option value='Poopybutthole'>Poopybutthole</option>
-          </select>
-
-          <label htmlFor='episode'>Эпизод</label>
-          <input
-            id='episode'
-            type='text'
-            name='episode'
-            placeholder='Название эпизода'
-            value={episodeName}
-            onChange={(e) => setEpisodeName(e.target.value)}
-          />
-        </form> */}
-
-        {/* {characters ? (
-          <ul>
-            {characters.map((character) => (
-              <CharacterCard key={character.id} {...character} />
-            ))}
-          </ul>
-        ) : isError ? (
-          <span>Error: {error.message}</span>
-        ) : isLoading ? (
-          <span>Ищем...</span>
-        ) : (
-          <span>Здесь пока ничего нет..</span>
-        )}
-
-        <p>{isFetching ? 'Ищем...' : null}</p> */}
-        {/* <button onClick={fetchNextPage}>LOAD MORE</button> */}
-
         <form className='w-8/12 mx-auto'>
           <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
             <div className='col-span-full'>
@@ -279,6 +167,16 @@ export const MainPage = () => {
           </div>
         </form>
 
+        {episodes ? (
+          <ul>
+            {episodes.results.map((episode) => (
+              <li key={episode.id}>
+                <Link to={`/episode/${episode.id}`}>{episode.name}</Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
         {characters ? (
           <ul>
             {characters.map((character) => (
@@ -286,18 +184,16 @@ export const MainPage = () => {
             ))}
           </ul>
         ) : isError ? (
-          <span>Error: {error.message}</span>
-        ) : isLoading ? (
+          <span>Ничего не найдено</span>
+        ) : isFetching ? (
           <span>Ищем...</span>
         ) : (
           <span>Здесь пока ничего нет..</span>
         )}
 
-        <p>{isFetching ? 'Ищем...' : null}</p>
-
         <button
           className='rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
-          onClick={fetchNextPage}
+          onClick={() => fetchNextPage()}
         >
           Загрузить еще
         </button>

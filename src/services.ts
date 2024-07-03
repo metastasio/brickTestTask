@@ -1,6 +1,16 @@
 import axios from 'axios';
 
-type Character = {
+type PaginatedData<T> = {
+  info: {
+    count: number;
+    pages: number;
+    next: string;
+    prev: null;
+  };
+  results: T[];
+};
+
+export type Character = {
   id: number;
   name: string;
   status: string;
@@ -21,15 +31,19 @@ type Character = {
   created: string;
 };
 
-type CharacterResponse = {
-  info: {
-    count: number;
-    pages: number;
-    next: string;
-    prev: null;
-  };
-  results: Character[];
+export type Episode = {
+  id: number;
+  name: string;
+  air_date: string;
+  episode: string;
+  characters: string[];
+  url: string;
+  created: string;
 };
+
+type EpisodeResponse = PaginatedData<Episode>;
+
+type CharacterResponse = PaginatedData<Character>;
 
 type Species =
   | 'Human'
@@ -50,7 +64,7 @@ type FilterParameters = {
   name?: string;
   species?: Species;
   status?: Status;
-  page?: number | string;
+  page?: number;
 };
 
 type EpisodeFilterParameters = {
@@ -60,7 +74,6 @@ type EpisodeFilterParameters = {
 const basePath = 'https://rickandmortyapi.com/api';
 
 export const fetchCharacters = async (params?: FilterParameters) => {
-  console.log(params, 'PARAMS')
   const { data } = await axios.get<CharacterResponse>(`${basePath}/character`, {
     params,
   });
@@ -73,6 +86,13 @@ export const fetchSingleCharacter = async (id?: string) => {
 };
 
 export const fetchEpisodes = async (params?: EpisodeFilterParameters) => {
-  const { data } = await axios.get(`${basePath}/episode`, { params });
+  const { data } = await axios.get<EpisodeResponse>(`${basePath}/episode`, {
+    params,
+  });
+  return data;
+};
+
+export const fetchSingleEpisode = async (id?: string) => {
+  const { data } = await axios.get<Episode>(`${basePath}/episode/${id}`);
   return data;
 };

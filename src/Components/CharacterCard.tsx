@@ -6,7 +6,7 @@ export const CharacterCard = (props: Character) => {
 
   return (
     <li>
-      <Link to={`character/${id}`}>
+      <Link to={`/character/${id}`}>
         <img
           src={image}
           alt={`Фото пользователя ${name}}`}
