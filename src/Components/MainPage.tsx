@@ -2,8 +2,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { ChangeEventHandler, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { fetchCharacters, fetchEpisodes } from '../services';
-// import { CharacterCard } from './CharacterCard';
-import { MainList } from './MainList';
+import { CharactersList } from './CharactersList';
 
 export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,9 +12,9 @@ export const MainPage = () => {
   const species = searchParams.get('species') ?? '';
 
   const {
-    isError,
+    error,
     data: characters,
-    isFetching,
+    isLoading,
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery({
@@ -50,11 +49,11 @@ export const MainPage = () => {
       [e.target.name]: e.target.value,
     }));
   };
-  console.log(isError, 'ERROR');
+
   return (
     <>
-      <main className='w-10/12 mt-12 mb-6 mx-auto'>
-        <form className='w-8/12 mx-auto mb-10'>
+      <main className='w-8/12 mt-12 mb-6 mx-auto'>
+        <form className='mb-10'>
           <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
             <div className='col-span-full'>
               <label
@@ -163,17 +162,15 @@ export const MainPage = () => {
           </ul>
         ) : null}
 
-        {characters ? (
-          <MainList
-            isError={isError}
-            isFetching={isFetching}
-            characters={characters}
-          />
-        ) : null}
+        <CharactersList
+          error={error}
+          isLoading={isLoading}
+          characters={characters}
+        />
 
         {hasNextPage ? (
           <button
-            className=' block mx-auto mt-10 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+            className='block mx-auto mt-10 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500'
             onClick={() => fetchNextPage()}
           >
             Загрузить еще

@@ -5,7 +5,7 @@ export const CharacterCard = (props: Character) => {
   const { id, name, image } = props;
 
   return (
-    <li className='max-w-20 hover:text-teal-500'>
+    <li className=' hover:text-teal-500 basis-1/5'>
       <Link to={`/character/${id}`}>
         <img
           className='h-20 w-20 rounded-full block m-auto'
