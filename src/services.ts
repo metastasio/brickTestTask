@@ -50,6 +50,7 @@ type FilterParameters = {
   name?: string;
   species?: Species;
   status?: Status;
+  page?: number | string;
 };
 
 type EpisodeFilterParameters = {
@@ -59,6 +60,7 @@ type EpisodeFilterParameters = {
 const basePath = 'https://rickandmortyapi.com/api';
 
 export const fetchCharacters = async (params?: FilterParameters) => {
+  console.log(params, 'PARAMS')
   const { data } = await axios.get<CharacterResponse>(`${basePath}/character`, {
     params,
   });

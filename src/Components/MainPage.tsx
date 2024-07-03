@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { ChangeEventHandler, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { fetchCharacters, fetchEpisodes } from '../services';
@@ -17,9 +17,24 @@ export const MainPage = () => {
     data: characters,
     error,
     isFetching,
-  } = useQuery({
+    fetchNextPage,
+  } = useInfiniteQuery({
     queryKey: ['characters', species, name, status],
-    queryFn: () => fetchCharacters({ species, name, status }),
+    queryFn: ({ pageParam: page = 0 }) =>
+      fetchCharacters({ species, name, status, page }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      const nextUrl = lastPage.info.next;
+      if (nextUrl) {
+        return nextUrl.split('page=')[1][0];
+      }
+      return false;
+    },
+    select: ({ pages }) => {
+      const test = pages.map(({ results }) => results).flat();
+
+      return test;
+    },
     enabled: !!name || !!status || !!species,
   });
 
@@ -29,7 +44,7 @@ export const MainPage = () => {
     enabled: !!episodeName,
   });
 
-  //   console.log(characters);
+  // console.log(characters, 'characters');
   console.log(episodes);
 
   const handleChange: ChangeEventHandler<
@@ -107,7 +122,7 @@ export const MainPage = () => {
 
         {characters ? (
           <ul>
-            {characters.results.map((character) => (
+            {characters.map((character) => (
               <CharacterCard key={character.id} {...character} />
             ))}
           </ul>
@@ -120,6 +135,7 @@ export const MainPage = () => {
         )}
 
         <p>{isFetching ? 'Ищем...' : null}</p>
+        <button onClick={fetchNextPage}>LOAD MORE</button>
       </main>
     </>
   );
