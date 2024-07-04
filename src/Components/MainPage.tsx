@@ -72,7 +72,7 @@ export const MainPage = () => {
   return (
     <>
       <main className='w-8/12 mt-12 mb-6 mx-auto'>
-        <form>
+        <form className='my-4'>
           <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
             <FormInput
               value={name}
