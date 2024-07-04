@@ -2,7 +2,7 @@ import { ChangeEventHandler } from 'react';
 
 type FormInputProps = {
   value: string;
-  handleChange: ChangeEventHandler<HTMLInputElement | HTMLSelectElement>;
+  handleChange: ChangeEventHandler<HTMLInputElement>;
   label: string;
   placeholder?: string;
   name: string;

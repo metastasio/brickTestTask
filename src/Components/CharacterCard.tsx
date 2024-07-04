@@ -27,17 +27,5 @@ export const CharacterCard = (props: Character) => {
         </div>
       </Link>
     </li>
-    // <li className=' hover:text-teal-500 basis-1/5'>
-    //   <Link to={`/character/${id}`}>
-    //     <img
-    //       className='h-20 w-20 rounded-full block m-auto'
-    //       src={image}
-    //       alt={`Изображение персонажа ${name}}`}
-    //       width='100'
-    //       height='100'
-    //     />
-    //     <p className='text-center'>{name}</p>
-    //   </Link>
-    // </li>
   );
 };

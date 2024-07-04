@@ -6,6 +6,7 @@ import { CharactersList } from './CharactersList';
 import { FormInput } from './FormInput';
 import { FormSelect } from './FormSelect';
 import { EpisodesList } from './EpisodesList';
+import { selectOptionsSpecies, selectOptionsStatus } from '../const';
 
 export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -71,7 +72,7 @@ export const MainPage = () => {
 
   return (
     <>
-      <main className='w-8/12 mt-12 mb-6 mx-auto relative'>
+      <main className='w-8/12 mt-12 mb-6 mx-auto'>
         <form className='my-4'>
           <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
             <FormInput
@@ -85,6 +86,7 @@ export const MainPage = () => {
               name='status'
               value={status}
               handleChange={handleChange}
+              options={selectOptionsStatus}
             >
               Жив?
             </FormSelect>
@@ -93,6 +95,7 @@ export const MainPage = () => {
               name='species'
               value={species}
               handleChange={handleChange}
+              options={selectOptionsSpecies}
             >
               Раса
             </FormSelect>
@@ -108,7 +111,7 @@ export const MainPage = () => {
         </form>
 
         <section className='grid grid-cols-1 md:grid-cols-3 gap-10'>
-          <section className='md:col-span-2'>
+          <section className='md:col-span-2 mt-10'>
             <CharactersList
               error={error}
               isLoading={isLoading}
@@ -125,7 +128,7 @@ export const MainPage = () => {
             ) : null}
           </section>
 
-          <section>
+          <section className='mt-10'>
             <EpisodesList
               error={episodesError}
               isLoading={isLoadingEpisodes}

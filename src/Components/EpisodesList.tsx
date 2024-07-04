@@ -1,7 +1,7 @@
 import { AxiosError, isAxiosError } from 'axios';
 import { Episode } from '../services';
 import { Spinner } from './Spinner';
-import { Link } from 'react-router-dom';
+import { ListLinkItem } from './ListLinkItem';
 
 type EpisodesListProps = {
   error?: Error | AxiosError | null;
@@ -24,24 +24,17 @@ export const EpisodesList = (props: EpisodesListProps) => {
   }
 
   if (!episodes?.length) {
-    return <p>Попробуйте поискать эпизоды</p>;
+    return <p className='text-right'>Попробуйте поискать эпизоды</p>;
   }
 
   return (
-    <section className='mt-10'>
+    <>
       <h2 className='mb-2 text-2xl font-semibold'>Эпизоды:</h2>
       <ul className='my-6'>
-        {episodes.map((episode) => (
-          <li className='mb-1' key={episode.id}>
-            <Link
-              className='text-lg text-cyan-700 hover:text-cyan-500 underline visited:text-cyan-500'
-              to={`/episode/${episode.id}`}
-            >
-              {episode.name}
-            </Link>
-          </li>
+        {episodes.map(({ id, name }) => (
+          <ListLinkItem key={id} redirect='episode' id={id} name={name} />
         ))}
       </ul>
-    </section>
+    </>
   );
 };

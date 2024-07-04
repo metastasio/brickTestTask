@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchSingleCharacter, fetchSingleEpisode } from '../services';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Spinner } from './Spinner';
+import { ListLinkItem } from './ListLinkItem';
 
 export const Episode = () => {
   const navigate = useNavigate();
@@ -60,22 +61,28 @@ function CharacterItem({ id }: { id: string }) {
   });
 
   if (status === 'pending') {
-    return <Spinner />;
+    return <p>Загружаем...</p>;
   }
-  
+
   if (status === 'error') {
     return <p className='text-red-900'>Произошла ошибка</p>;
   }
 
   return (
-    <li>
-      <Link
-        key={id}
-        className='text-center text-lg text-cyan-700 hover:text-cyan-500 underline visited:text-cyan-500 visited:no-underline'
-        to={`/character/${id}`}
-      >
-        {character?.name}
-      </Link>
-    </li>
+    <ListLinkItem
+      key={id}
+      id={Number(id)}
+      name={character?.name}
+      redirect='character'
+    />
+    // <li>
+    //   <Link
+    //     key={id}
+    //     className='text-center text-lg text-cyan-700 hover:text-cyan-500 underline visited:text-cyan-500 visited:no-underline'
+    //     to={`/character/${id}`}
+    //   >
+    //     {character?.name}
+    //   </Link>
+    // </li>
   );
 }
