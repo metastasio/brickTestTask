@@ -28,10 +28,13 @@ export const CharactersList = (props: CharactersListProps) => {
   }
 
   return (
-    <ul className='mt-10 flex flex-wrap justify-evenly gap-10'>
-      {characters.map((character) => (
-        <CharacterCard key={character.id} {...character} />
-      ))}
-    </ul>
+    <section className='mt-10'>
+      <h2 className='mb-2 text-2xl font-semibold'>Персонажи:</h2>
+      <ul className='mr-10 divide-y divide-slate-300'>
+        {characters.map((character) => (
+          <CharacterCard key={character.id} {...character} />
+        ))}
+      </ul>
+    </section>
   );
 };

@@ -28,9 +28,9 @@ export const EpisodesList = (props: EpisodesListProps) => {
   }
 
   return (
-    <section className='mt-10 ml-2'>
+    <section className='mt-10'>
       <h2 className='mb-2 text-2xl font-semibold'>Эпизоды:</h2>
-      <ul className='mb-10'>
+      <ul className='my-6'>
         {episodes.map((episode) => (
           <li className='mb-1' key={episode.id}>
             <Link
