@@ -25,7 +25,7 @@ export const Episode = () => {
   }
 
   return (
-    <article className='w-8/12 mt-10 mx-auto'>
+    <article className='w-8/12 mt-6 mx-auto'>
       <button
         className='block rounded-md bg-transparent px-3 py-2 text-sm border border-teal-400 hover:bg-teal-200 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-lime-500'
         onClick={() => navigate(-1)}
@@ -33,7 +33,7 @@ export const Episode = () => {
         Назад
       </button>
 
-      <div>
+      <section className='my-6'>
         <h2 className='text-4xl text-center font-mono font-bold'>
           {episode?.name}
         </h2>
@@ -49,7 +49,7 @@ export const Episode = () => {
             return <CharacterItem id={characterId} key={characterId} />;
           })}
         </ul>
-      </div>
+      </section>
     </article>
   );
 };

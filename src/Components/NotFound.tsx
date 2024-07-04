@@ -1,18 +1,16 @@
 import { useNavigate } from 'react-router-dom';
+import { Button } from './Button';
 
 export const NotFound = () => {
   const navigate = useNavigate();
   return (
     <div className='w-8/12 my-6 mx-auto'>
-      <h2 className='text-2xl text-center'>Ничего не найдено</h2>
-      <button
-        className='block mx-auto my-4 text-center text-lg text-cyan-700 hover:text-cyan-500 underline'
-        onClick={() => navigate(-1)}
-      >
+      <Button handleClick={() => navigate(-1)} type='secondary'>
         Назад
-      </button>
+      </Button>
+      <h2 className='mt-6 text-2xl text-center'>Ничего не найдено</h2>
       <img
-        className='block mx-auto'
+        className='block my-6 mx-auto'
         src='/rick-and-morty-8.webp'
         alt='Грустный Морти'
         width='400'

@@ -7,6 +7,7 @@ import { FormInput } from './FormInput';
 import { FormSelect } from './FormSelect';
 import { EpisodesList } from './EpisodesList';
 import { selectOptionsSpecies, selectOptionsStatus } from '../const';
+import { Button } from './Button';
 
 export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -119,12 +120,7 @@ export const MainPage = () => {
             />
 
             {hasNextPage ? (
-              <button
-                className='block mx-auto mt-10 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500'
-                onClick={() => fetchNextPage()}
-              >
-                Загрузить еще
-              </button>
+              <Button handleClick={() => fetchNextPage()}>Загрузить еще</Button>
             ) : null}
           </section>
 
@@ -136,12 +132,9 @@ export const MainPage = () => {
             />
 
             {hasNextEpisodes ? (
-              <button
-                className='block mt-4 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500'
-                onClick={() => fetchNextEpisodes()}
-              >
+              <Button handleClick={() => fetchNextEpisodes()}>
                 Загрузить еще
-              </button>
+              </Button>
             ) : null}
           </section>
         </section>

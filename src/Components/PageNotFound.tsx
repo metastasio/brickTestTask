@@ -5,7 +5,7 @@ export const PageNotFound = () => {
     <div className='w-8/12 my-6 mx-auto'>
       <h2 className='text-2xl text-center'>Такой страницы нет</h2>
       <Link
-        className='block my-4 text-center text-lg text-cyan-700 hover:text-cyan-500 underline'
+        className='block my-4 text-center text-lg text-cyan-700 visited:text-teal-700 hover:text-teal-500 underline'
         to='/'
       >
         На главную

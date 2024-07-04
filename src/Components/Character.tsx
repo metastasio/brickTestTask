@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { fetchSingleCharacter } from '../services';
 import { Spinner } from './Spinner';
+import { Button } from './Button';
 
 export const Character = () => {
   const navigate = useNavigate();
@@ -20,17 +21,15 @@ export const Character = () => {
   }
 
   return (
-    <section className='w-8/12 mt-10 mx-auto'>
-      <button
-        className='block rounded-md bg-transparent px-3 py-2 text-teal-600 text-sm border border-teal-400 hover:bg-teal-200 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-lime-500'
-        onClick={() => navigate(-1)}
-      >
+    <section className='w-8/12 mt-6 mx-auto'>
+      <Button handleClick={() => navigate(-1)} type='secondary'>
         Назад
-      </button>
+      </Button>
+
       {isLoading ? (
         <Spinner />
       ) : (
-        <section>
+        <section className='my-6'>
           <h2 className='text-4xl text-center font-mono font-bold'>
             {character?.name}
           </h2>
