@@ -45,7 +45,6 @@ export const Episode = () => {
           {episode?.characters.map((character) => {
             const characterUrlParts = character.split('/');
             const characterId = characterUrlParts[characterUrlParts.length - 1];
-            console.log(characterId, 'CHARACTER');
             return <CharacterItem id={characterId} key={characterId} />;
           })}
         </ul>
@@ -60,8 +59,13 @@ function CharacterItem({ id }: { id: string }) {
     queryFn: () => fetchSingleCharacter(id),
   });
 
-  if (status === 'pending') return <p>Loading...</p>;
-  if (status === 'error') return <p>Error :c</p>;
+  if (status === 'pending') {
+    return <Spinner />;
+  }
+  
+  if (status === 'error') {
+    return <p className='text-red-900'>Произошла ошибка</p>;
+  }
 
   return (
     <li>
