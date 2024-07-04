@@ -1,10 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { ChangeEventHandler } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { fetchCharacters, fetchEpisodes } from '../services';
 import { CharactersList } from './CharactersList';
 import { FormInput } from './FormInput';
 import { FormSelect } from './FormSelect';
+import { EpisodesList } from './EpisodesList';
 
 export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,7 +38,9 @@ export const MainPage = () => {
   });
 
   const {
+    error: episodesError,
     data: episodes,
+    isLoading: isLoadingEpisodes,
     fetchNextPage: fetchNextEpisodes,
     hasNextPage: hasNextEpisodes,
   } = useInfiniteQuery({
@@ -85,28 +88,6 @@ export const MainPage = () => {
             >
               Жив?
             </FormSelect>
-            {/* <div className='sm:col-span-3'>
-              <label
-                htmlFor='status'
-                className='block text-lg font-medium leading-6'
-              >
-                Жив?
-              </label>
-              <div className='mt-2'>
-                <select
-                  name='status'
-                  id='status'
-                  value={status}
-                  onChange={handleChange}
-                  className='block w-full bg-teal-50 rounded-md border-0 px-1 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600  sm:text-sm sm:leading-6'
-                >
-                  <option value=''>Выберите вариант</option>
-                  <option value='alive'>Да</option>
-                  <option value='dead'>Нет</option>
-                  <option value='unknown'>Неизвестно</option>
-                </select>
-              </div>
-            </div> */}
 
             <FormSelect
               name='species'
@@ -115,37 +96,6 @@ export const MainPage = () => {
             >
               Раса
             </FormSelect>
-            {/* <div className='sm:col-span-3'>
-              <label
-                htmlFor='species'
-                className='block text-lg font-medium leading-6'
-              >
-                Раса
-              </label>
-              <div className='mt-2'>
-                <select
-                  name='species'
-                  id='species'
-                  value={species}
-                  onChange={handleChange}
-                  className='block w-full bg-teal-50 rounded-md border-0 px-1 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-cyan-600  sm:text-sm sm:leading-6'
-                >
-                  <option value=''>Выберите вариант</option>
-                  <option value='Humanoid'>Гуманоид</option>
-                  <option value='Animal'>Животное</option>
-                  <option value='Disease'>Заболевания</option>
-                  <option value='Cronenberg'>Кроненберг</option>
-                  <option value='Mythological Creature'>
-                    Мифологические существа
-                  </option>
-                  <option value='unknown'>Неизвестно</option>
-                  <option value='Alien'>Пришелец</option>
-                  <option value='Robot'>Робот</option>
-                  <option value='Human'>Человек</option>
-                  <option value='Poopybutthole'>Poopybutthole</option>
-                </select>
-              </div>
-            </div> */}
 
             <FormInput
               value={episode}
@@ -157,23 +107,11 @@ export const MainPage = () => {
           </div>
         </form>
 
-        {episodes ? (
-          <section className='mt-10 ml-2'>
-            <h2 className='mb-2 text-2xl font-semibold'>Эпизоды:</h2>
-            <ul className='mb-10'>
-              {episodes.map((episode) => (
-                <li className='mb-1' key={episode.id}>
-                  <Link
-                    className='text-lg text-cyan-700 hover:text-cyan-500 underline visited:text-cyan-500'
-                    to={`/episode/${episode.id}`}
-                  >
-                    {episode.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
+        <EpisodesList
+          error={episodesError}
+          isLoading={isLoadingEpisodes}
+          episodes={episodes}
+        />
 
         {hasNextEpisodes ? (
           <button
