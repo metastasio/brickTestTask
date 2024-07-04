@@ -3,6 +3,8 @@ import { ChangeEventHandler } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { fetchCharacters, fetchEpisodes } from '../services';
 import { CharactersList } from './CharactersList';
+import { FormInput } from './FormInput';
+import { FormSelect } from './FormSelect';
 
 export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -69,27 +71,21 @@ export const MainPage = () => {
       <main className='w-8/12 mt-12 mb-6 mx-auto'>
         <form>
           <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
-            <div className='col-span-full'>
-              <label
-                htmlFor='name'
-                className='block text-lg font-medium leading-6'
-              >
-                Имя персонажа
-              </label>
-              <div className='mt-2'>
-                <input
-                  id='name'
-                  type='text'
-                  name='name'
-                  placeholder='Имя персонажа'
-                  value={name}
-                  onChange={handleChange}
-                  className='block w-full bg-teal-50 rounded-md border-0 px-2 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6'
-                />
-              </div>
-            </div>
+            <FormInput
+              value={name}
+              name='name'
+              label='Имя персонажа'
+              handleChange={handleChange}
+            />
 
-            <div className='sm:col-span-3'>
+            <FormSelect
+              name='status'
+              value={status}
+              handleChange={handleChange}
+            >
+              Жив?
+            </FormSelect>
+            {/* <div className='sm:col-span-3'>
               <label
                 htmlFor='status'
                 className='block text-lg font-medium leading-6'
@@ -110,9 +106,16 @@ export const MainPage = () => {
                   <option value='unknown'>Неизвестно</option>
                 </select>
               </div>
-            </div>
+            </div> */}
 
-            <div className='sm:col-span-3'>
+            <FormSelect
+              name='species'
+              value={species}
+              handleChange={handleChange}
+            >
+              Раса
+            </FormSelect>
+            {/* <div className='sm:col-span-3'>
               <label
                 htmlFor='species'
                 className='block text-lg font-medium leading-6'
@@ -142,27 +145,15 @@ export const MainPage = () => {
                   <option value='Poopybutthole'>Poopybutthole</option>
                 </select>
               </div>
-            </div>
+            </div> */}
 
-            <div className='col-span-full'>
-              <label
-                htmlFor='episode'
-                className='block text-lg font-medium leading-6'
-              >
-                Эпизод
-              </label>
-              <div className='mt-2'>
-                <input
-                  id='episode'
-                  type='text'
-                  name='episode'
-                  placeholder='Название эпизода'
-                  value={episode}
-                  onChange={handleChange}
-                  className='block w-full bg-teal-50 rounded-md border-0 px-2 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6'
-                />
-              </div>
-            </div>
+            <FormInput
+              value={episode}
+              name='episode'
+              label='Эпизод'
+              placeholder='Название эпизода'
+              handleChange={handleChange}
+            />
           </div>
         </form>
 
