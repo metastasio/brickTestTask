@@ -107,35 +107,41 @@ export const MainPage = () => {
           </div>
         </form>
 
-        <EpisodesList
-          error={episodesError}
-          isLoading={isLoadingEpisodes}
-          episodes={episodes}
-        />
+        <section className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+          <section className='md:col-span-2'>
+            <CharactersList
+              error={error}
+              isLoading={isLoading}
+              characters={characters}
+            />
 
-        {hasNextEpisodes ? (
-          <button
-            className='block mt-4 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500'
-            onClick={() => fetchNextEpisodes()}
-          >
-            Загрузить еще
-          </button>
-        ) : null}
+            {hasNextPage ? (
+              <button
+                className='block mx-auto mt-10 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500'
+                onClick={() => fetchNextPage()}
+              >
+                Загрузить еще
+              </button>
+            ) : null}
+          </section>
 
-        <CharactersList
-          error={error}
-          isLoading={isLoading}
-          characters={characters}
-        />
+          <section>
+            <EpisodesList
+              error={episodesError}
+              isLoading={isLoadingEpisodes}
+              episodes={episodes}
+            />
 
-        {hasNextPage ? (
-          <button
-            className='block mx-auto mt-10 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500'
-            onClick={() => fetchNextPage()}
-          >
-            Загрузить еще
-          </button>
-        ) : null}
+            {hasNextEpisodes ? (
+              <button
+                className='block ml-2 mt-4 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500'
+                onClick={() => fetchNextEpisodes()}
+              >
+                Загрузить еще
+              </button>
+            ) : null}
+          </section>
+        </section>
       </main>
     </>
   );
