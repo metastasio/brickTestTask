@@ -3,6 +3,7 @@ import { fetchSingleCharacter, fetchSingleEpisode } from '../services';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Spinner } from './Spinner';
 import { ListLinkItem } from './ListLinkItem';
+import { Button } from './Button';
 
 export const Episode = () => {
   const navigate = useNavigate();
@@ -26,12 +27,9 @@ export const Episode = () => {
 
   return (
     <article className='w-8/12 mt-6 mx-auto'>
-      <button
-        className='block rounded-md bg-transparent px-3 py-2 text-sm border border-teal-400 hover:bg-teal-200 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-lime-500'
-        onClick={() => navigate(-1)}
-      >
+      <Button handleClick={() => navigate(-1)} type='secondary'>
         Назад
-      </button>
+      </Button>
 
       <section className='my-6'>
         <h2 className='text-4xl text-center font-mono font-bold'>
@@ -75,14 +73,5 @@ function CharacterItem({ id }: { id: string }) {
       name={character?.name}
       redirect='character'
     />
-    // <li>
-    //   <Link
-    //     key={id}
-    //     className='text-center text-lg text-cyan-700 hover:text-cyan-500 underline visited:text-cyan-500 visited:no-underline'
-    //     to={`/character/${id}`}
-    //   >
-    //     {character?.name}
-    //   </Link>
-    // </li>
   );
 }
